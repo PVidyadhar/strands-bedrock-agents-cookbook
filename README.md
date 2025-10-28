@@ -171,7 +171,7 @@ Create a `variables.json` file in the project root to configure AWS settings:
 
 ## License
 
-Please contact the project owner for licensing information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
