@@ -69,6 +69,31 @@ agent = Agent()
 agent("Explain Amazon Bedrock Agents?")
 ```
 
+### Extended Thinking (Reasoning Model)
+
+**Extended Thinking** (also called "interleaved thinking" in Claude 4) enables Claude to think more deeply when solving complex problems, providing transparent reasoning processes alongside final answers.
+
+
+#### For Claude 4 Sonnet (with Interleaved Thinking):
+
+```python
+from strands import Agent
+from strands.models.bedrock import BedrockModel
+
+model = BedrockModel(
+    model_id="us.anthropic.claude-sonnet-4-20250514-v1:0",
+    additional_request_fields={
+        "anthropic_beta": ["interleaved-thinking-2025-05-14"],
+        "thinking": {"type": "enabled", "budget_tokens": 8000}
+    }
+)
+
+agent = Agent(model=model)
+response = agent("What are the benefits of reasoning models?")
+```
+
+The reasoning process is accessible via `reasoningContent` in the response blocks.
+
 ### Agent with Tools
 
 ```python

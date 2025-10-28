@@ -69,6 +69,30 @@ agent = Agent()
 agent("Explain Amazon Bedrock Agents?")
 ```
 
+### Extended Thinking (추론 모델)
+
+**Extended Thinking** (Claude 4에서는 "interleaved thinking"이라고도 함)은 Claude가 복잡한 문제를 해결할 때 더 깊이 사고할 수 있게 하여, 최종 답변과 함께 투명한 추론 과정을 제공합니다.
+
+#### Claude 4 Sonnet의 경우 (Interleaved Thinking 포함):
+
+```python
+from strands import Agent
+from strands.models.bedrock import BedrockModel
+
+model = BedrockModel(
+    model_id="us.anthropic.claude-sonnet-4-20250514-v1:0",
+    additional_request_fields={
+        "anthropic_beta": ["interleaved-thinking-2025-05-14"],
+        "thinking": {"type": "enabled", "budget_tokens": 8000}
+    }
+)
+
+agent = Agent(model=model)
+response = agent("추론 모델의 장점은 무엇인가요?")
+```
+
+추론 과정은 응답 블록의 `reasoningContent`를 통해 접근할 수 있습니다.
+
 ### 도구를 사용한 에이전트
 
 ```python
