@@ -20,6 +20,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+/repl_state/
 
 # Jupyter Notebook
 .ipynb_checkpoints
