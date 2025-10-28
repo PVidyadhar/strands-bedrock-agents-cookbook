@@ -1,9 +1,10 @@
-# Claude 3.7 Sonnet Reasoning with Amazon Bedrock
+## Claude Reasoning Models with Amazon Bedrock
 
-This guide demonstrates how to use Anthropic Claude 3.7 Sonnet's reasoning capability with Amazon Bedrock using Python.
+This guide demonstrates how to use Anthropic Claude's reasoning capabilities (Claude 3.7 Sonnet and Claude 4.0 Sonnet) with Amazon Bedrock using Python.
 
 ## Reference
 - [How to use reasoning with Claude 3.7 Sonnet on Amazon Bedrock (Python Edition)](https://builder.aws.com/content/2tWvN7GNtVuBco4fNgLuowHas2c/how-to-use-reasoning-with-claude-37-sonnet-on-amazon-bedrock-python-edition)
+- [Claude 4.0 Sonnet Announcement](https://www.anthropic.com/news/claude-4-sonnet)
 
 ## Prerequisites
 
@@ -34,6 +35,8 @@ AWS_DEFAULT_REGION=us-east-1
 ---
 
 ## Step-by-Step Implementation Guide
+
+### Claude 3.7 Sonnet Reasoning
 
 ### Step 1: Create a Basic File Structure
 
@@ -252,19 +255,91 @@ The key advantage of reasoning agents is their ability to tackle problems requir
 
 ---
 
+## Claude 4.0 Sonnet with Interleaved Thinking
+
+Claude 4.0 Sonnet introduces **interleaved thinking**, an enhanced reasoning mode that provides more sophisticated thought processes embedded throughout the response. Unlike Claude 3.7 where reasoning appears separately, Claude 4.0's thinking is more tightly integrated with its answers.
+
+### Key Differences from Claude 3.7:
+
+1. **Interleaved Format**: Thinking appears alongside the response rather than as separate blocks
+2. **Enhanced Beta Feature**: Requires the `interleaved-thinking-2025-05-14` beta flag
+3. **More Sophisticated Reasoning**: Improved multi-step reasoning capabilities
+4. **Model ID**: `us.anthropic.claude-sonnet-4-20250514-v1:0`
+
+
+### Using with Strands Agents SDK
+
+You can also use Claude 4.0's interleaved thinking with the Strands Agents SDK:
+
+```python
+from strands import Agent
+from strands.models.bedrock import BedrockModel
+
+# Configure Claude 4.0 with interleaved thinking
+model = BedrockModel(
+    model_id="us.anthropic.claude-sonnet-4-20250514-v1:0",
+    additional_request_fields={
+        "anthropic_beta": ["interleaved-thinking-2025-05-14"],
+        "thinking": {
+            "type": "enabled",
+            "budget_tokens": 8000
+        }
+    }
+)
+
+# Create agent with the configured model
+agent = Agent(model=model)
+
+# Use the agent
+response = agent("Explain the benefits of using reasoning models in enterprise applications")
+
+# Access reasoning content from response blocks
+for block in response.blocks:
+    if hasattr(block, 'reasoningContent'):
+        print("Thinking:", block.reasoningContent)
+    if hasattr(block, 'text'):
+        print("Response:", block.text)
+```
+
+### Best Practices for Claude 4.0 Interleaved Thinking
+
+1. **Token Budget**: Use higher token budgets (5000-10000) for complex reasoning tasks
+2. **Prompt Design**: Frame questions that benefit from multi-step reasoning
+3. **Error Handling**: Always implement proper error handling for API calls
+4. **Beta Features**: Be aware that beta features may change; monitor Anthropic's updates
+5. **Performance**: Interleaved thinking may take longer; consider timeouts for production use
+
+### When to Use Claude 4.0 vs Claude 3.7
+
+**Use Claude 4.0 Interleaved Thinking when:**
+- You need state-of-the-art reasoning capabilities
+- Complex multi-step problem-solving is required
+- You want more sophisticated thought processes
+- Working on enterprise-critical decisions
+
+**Use Claude 3.7 Reasoning when:**
+- You need a stable, non-beta feature
+- Simpler reasoning tasks are sufficient
+- Cost optimization is a priority
+- Faster response times are preferred
+
+---
+
 ## Summary and Next Steps
 
-The reasoning capability transforms how we interact with AI by providing valuable insight into the model's thinking process. By following the steps in this guide, you can now access and leverage this powerful feature through Amazon Bedrock using Python.
+Both Claude 3.7 Sonnet and Claude 4.0 Sonnet's reasoning capabilities transform how we interact with AI by providing valuable insight into the model's thinking process. By following the steps in this guide, you can now access and leverage these powerful features through Amazon Bedrock using Python.
 
-The reasoning feature opens up exciting possibilities to enhance trust, improve outcomes, and gain deeper insights from your AI interactions.
+The reasoning features open up exciting possibilities to enhance trust, improve outcomes, and gain deeper insights from your AI interactions.
 
 ### For More Advanced Use Cases, Consider:
 
-- **Adjusting the token budget** based on your problem complexity – more complex problems may benefit from larger reasoning budgets
+- **Choosing the right model**: Use Claude 4.0 for complex reasoning tasks, Claude 3.7 for stable production use
+- **Adjusting the token budget** based on your problem complexity – more complex problems may benefit from larger reasoning budgets (Claude 4.0 supports up to 10,000 tokens)
 - **Using the reasoning output** to validate multi-step calculations or complex analytical processes
-- **Comparing different reasoning approaches** by adjusting your prompts
+- **Comparing different reasoning approaches** by adjusting your prompts and testing both models
 - **Integrating reasoning** with other Claude capabilities like function calling for powerful, transparent AI solutions
 - **Using reasoning as an educational tool** to understand expert-level problem-solving approaches
+- **Monitoring beta features**: Stay updated on Anthropic's beta releases for the latest capabilities
 
 By incorporating reasoning into your applications, you're not just getting answers – you're gaining insight into the full problem-solving journey. This transparency can help build trust with users and provide richer, more valuable AI interactions.
 
