@@ -21,6 +21,7 @@ wheels/
 *.egg
 MANIFEST
 /repl_state/
+repl_state/
 
 # Jupyter Notebook
 .ipynb_checkpoints
